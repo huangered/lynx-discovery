@@ -1,2 +1,5 @@
 rootProject.name = 'test3'
-
+include 'core'
+include 'server'
+include 'client'
+include 'integration-test'
