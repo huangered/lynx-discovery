@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.yih.pojo.RegisterRequest;
 import com.yih.pojo.RegisterSvc;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Handler;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,51 +25,57 @@ public class CacheVerticle extends AbstractVerticle {
     @Override
     public void start() throws Exception {
         EventBus bus = vertx.eventBus();
-        bus.<JsonObject>consumer("svc.register", msg -> {
-            log.info("receive msg {}", msg.body().toString());
-            RegisterRequest req = gson.fromJson(msg.body().toString(), RegisterRequest.class);
+        bus.consumer("svc.register", this::handleRegister);
 
-            RegisterSvc svc = new RegisterSvc(req, true);
+        bus.consumer("svc.unregister", this::handleUnregister);
 
-            map.putIfAbsent(svc.getReq().getName(), new HashSet<>());
-            if (!map.get(svc.getReq().getName()).contains(svc)) {
-                map.get(svc.getReq().getName()).add(svc);
-                vertx.deployVerticle(new HealthCheckVerticle(
-                        svc.getReq().getName(),
-                        svc.getReq().getUrl(),
-                        svc.getReq().getPort()))
-                        .onSuccess(handler -> {
-                            svc.setHealthCheckVerticleId(handler);
-                            svc.setAlive(true);
-                        });
-            }
-        });
-
-        bus.<JsonObject>consumer("svc.unregister", msg -> {
-            log.info("svc.unregister {}",msg.body());
-            String depId = msg.body().getString("depId");
-            String svcName = msg.body().getString("svcName");
-
-            map.getOrDefault(svcName, new HashSet<>())
-                    .removeIf(registerSvc -> registerSvc.getHealthCheckVerticleId().equals(depId));
-
-        });
-
-        bus.<String>consumer("svc.query", msg -> {
-            log.info("svc.query {}", msg.body());
-            String svcName = msg.body();
-            Set<RegisterSvc> ss = map.getOrDefault(svcName, new HashSet<>());
-            if (ss.isEmpty()) {
-                msg.reply("");
-            } else {
-                RegisterSvc svc = ss.stream().findAny().get();
-                msg.reply(String.format("%s:%s", svc.getReq().getUrl(), svc.getReq().getPort()));
-            }
-        });
+        bus.consumer("svc.query", this::handleQuery);
 
         vertx.setPeriodic(5000, print -> {
             log.info("Print map {}", map);
         });
+    }
+
+    private void handleQuery(Message<String> msg) {
+        log.info("svc.query {}", msg.body());
+        String svcName = msg.body();
+        Set<RegisterSvc> ss = map.getOrDefault(svcName, new HashSet<>());
+        if (ss.isEmpty()) {
+            msg.reply("");
+        } else {
+            RegisterSvc svc = ss.stream().findAny().get();
+            msg.reply(String.format("%s:%s", svc.getReq().getUrl(), svc.getReq().getPort()));
+        }
+    }
+
+    private void handleUnregister(Message<JsonObject> msg) {
+        log.info("svc.unregister {}", msg.body());
+        String depId = msg.body().getString("depId");
+        String svcName = msg.body().getString("svcName");
+
+        map.getOrDefault(svcName, new HashSet<>())
+                .removeIf(registerSvc -> registerSvc.getHealthCheckVerticleId().equals(depId));
+
+    }
+
+    private void handleRegister(Message<JsonObject> msg) {
+        log.info("receive msg {}", msg.body().toString());
+        RegisterRequest req = gson.fromJson(msg.body().toString(), RegisterRequest.class);
+
+        RegisterSvc svc = new RegisterSvc(req, true);
+
+        map.putIfAbsent(svc.getReq().getName(), new HashSet<>());
+        if (!map.get(svc.getReq().getName()).contains(svc)) {
+            map.get(svc.getReq().getName()).add(svc);
+            vertx.deployVerticle(new HealthCheckVerticle(
+                    svc.getReq().getName(),
+                    svc.getReq().getUrl(),
+                    svc.getReq().getPort()))
+                    .onSuccess(handler -> {
+                        svc.setHealthCheckVerticleId(handler);
+                        svc.setAlive(true);
+                    });
+        }
     }
 
     @Override
