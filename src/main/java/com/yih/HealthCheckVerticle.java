@@ -1,6 +1,7 @@
 package com.yih;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,12 @@ public class HealthCheckVerticle extends AbstractVerticle {
                             if (errCount > 10) {
                                 // remove from map
                                 // undeployment self
+                                log.info("svc {} lost, unregister", svcName);
+                                JsonObject obj = new JsonObject()
+                                        .put("svcName", svcName)
+                                        .put("depId", this.deploymentID());
+
+                                vertx.eventBus().publish("svc.unregister", obj);
                                 vertx.undeploy(this.deploymentID());
                             }
                         }

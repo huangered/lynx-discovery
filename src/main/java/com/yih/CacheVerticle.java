@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 @Slf4j
 public class CacheVerticle extends AbstractVerticle {
@@ -40,6 +41,16 @@ public class CacheVerticle extends AbstractVerticle {
                             svc.setAlive(true);
                         });
             }
+        });
+
+        bus.<JsonObject>consumer("svc.unregister", msg -> {
+            log.info("svc.unregister {}",msg.body());
+            String depId = msg.body().getString("depId");
+            String svcName = msg.body().getString("svcName");
+
+            map.getOrDefault(svcName, new HashSet<>())
+                    .removeIf(registerSvc -> registerSvc.getHealthCheckVerticleId().equals(depId));
+
         });
 
         bus.<String>consumer("svc.query", msg -> {
