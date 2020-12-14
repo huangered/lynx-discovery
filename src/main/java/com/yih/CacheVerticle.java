@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,8 +43,14 @@ public class CacheVerticle extends AbstractVerticle {
         if (ss.isEmpty()) {
             msg.reply("");
         } else {
-            SvcStatus svc = ss.stream().findAny().get();
-            msg.reply(String.format("%s:%s", svc.getDesc().getUrl(), svc.getDesc().getPort()));
+            Optional<SvcStatus> svc = ss.stream()
+                    .filter(SvcStatus::isAlive)
+                    .findAny();
+            if (svc.isPresent()) {
+                msg.reply(String.format("%s:%s", svc.get().getDesc().getUrl(), svc.get().getDesc().getPort()));
+            } else {
+                msg.reply("");
+            }
         }
     }
 
