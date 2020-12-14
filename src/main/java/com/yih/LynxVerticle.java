@@ -1,5 +1,8 @@
 package com.yih;
 
+import com.google.gson.Gson;
+import com.yih.codec.SvcDescCodec;
+import com.yih.pojo.SvcDesc;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -13,10 +16,12 @@ public class LynxVerticle extends AbstractVerticle {
 
     public static void main(String[] argc) {
         Vertx vertx = Vertx.vertx();
-
+        vertx.eventBus().registerDefaultCodec(SvcDesc.class, new SvcDescCodec());
         vertx.deployVerticle(new LynxVerticle());
         vertx.deployVerticle(new CacheVerticle());
     }
+
+    Gson gson = new Gson();
 
     @Override
     public void start() {
@@ -50,7 +55,7 @@ public class LynxVerticle extends AbstractVerticle {
     }
 
     private void handleRegister(RoutingContext routingContext) {
-        JsonObject request = routingContext.getBodyAsJson();
+        SvcDesc request = gson.fromJson(routingContext.getBodyAsString(), SvcDesc.class);
         log.info("handle request {}", request);
 
         vertx.eventBus().publish("svc.register", request);

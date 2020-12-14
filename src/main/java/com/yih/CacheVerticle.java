@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.yih.pojo.SvcDesc;
 import com.yih.pojo.SvcStatus;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Handler;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
@@ -56,19 +57,15 @@ public class CacheVerticle extends AbstractVerticle {
 
     }
 
-    private void handleRegister(Message<JsonObject> msg) {
-        log.info("receive msg {}", msg.body().toString());
-        SvcDesc req = gson.fromJson(msg.body().toString(), SvcDesc.class);
+    private void handleRegister(Message<SvcDesc> req) {
+        log.info("receive msg {}", req.body().toString());
 
-        SvcStatus svc = new SvcStatus(req, true);
+        SvcStatus svc = new SvcStatus(req.body(), true);
 
         map.putIfAbsent(svc.getDesc().getName(), new HashSet<>());
         if (!map.get(svc.getDesc().getName()).contains(svc)) {
             map.get(svc.getDesc().getName()).add(svc);
-            vertx.deployVerticle(new HealthCheckVerticle(
-                    svc.getDesc().getName(),
-                    svc.getDesc().getUrl(),
-                    svc.getDesc().getPort()))
+            vertx.deployVerticle(new HealthCheckVerticle(svc))
                     .onSuccess(handler -> {
                         svc.setHealthCheckVerticleId(handler);
                         svc.setAlive(true);

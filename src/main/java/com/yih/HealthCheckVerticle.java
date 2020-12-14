@@ -1,5 +1,6 @@
 package com.yih;
 
+import com.yih.pojo.SvcStatus;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClient;
@@ -9,22 +10,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HealthCheckVerticle extends AbstractVerticle {
 
-    private final String svcName;
-    private final String svcUrl;
-    private final int svcPort;
+    private final SvcStatus svc;
     private WebClient webClient;
     private int errCount;
     private long timerId;
 
-    public HealthCheckVerticle(String svcName, String svcUrl, int svcPort) {
-        errCount = 0;
-        this.svcName = svcName;
-        this.svcUrl = svcUrl;
-        this.svcPort = svcPort;
+    public HealthCheckVerticle(SvcStatus svc) {
+        this.errCount = 0;
+        this.svc = svc;
     }
 
     @Override
     public void start() throws Exception {
+        final String svcName = svc.getDesc().getName();
+        final String svcUrl = svc.getDesc().getUrl();
+        final int svcPort = svc.getDesc().getPort();
         webClient = WebClient.create(vertx);
         timerId = vertx.setPeriodic(5000, r -> {
             webClient.get(svcPort, svcUrl, "/")
