@@ -5,13 +5,13 @@ import lombok.Data;
 import java.util.Objects;
 
 @Data
-public class RegisterSvc {
-    private RegisterRequest req;
+public class SvcStatus {
+    private SvcDesc desc;
     private boolean alive;
     private String healthCheckVerticleId;
 
-    public RegisterSvc(RegisterRequest req, boolean alive) {
-        this.req = req;
+    public SvcStatus(SvcDesc desc, boolean alive) {
+        this.desc = desc;
         this.alive = alive;
     }
 
@@ -20,13 +20,13 @@ public class RegisterSvc {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RegisterSvc that = (RegisterSvc) o;
+        SvcStatus that = (SvcStatus) o;
 
-        return Objects.equals(req, that.req);
+        return Objects.equals(desc, that.desc);
     }
 
     @Override
     public int hashCode() {
-        return req != null ? req.hashCode() : 0;
+        return desc != null ? desc.hashCode() : 0;
     }
 }

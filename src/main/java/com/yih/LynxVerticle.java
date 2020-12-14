@@ -1,6 +1,5 @@
 package com.yih;
 
-import com.google.gson.Gson;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -11,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class LynxVerticle extends AbstractVerticle {
-    Gson gson = new Gson();
 
     public static void main(String[] argc) {
         Vertx vertx = Vertx.vertx();
@@ -48,7 +46,7 @@ public class LynxVerticle extends AbstractVerticle {
 
         vertx.eventBus().publish("svc.unregister", request);
 
-        routingContext.response().end();
+        routingContext.response().end("ok");
     }
 
     private void handleRegister(RoutingContext routingContext) {
@@ -57,7 +55,7 @@ public class LynxVerticle extends AbstractVerticle {
 
         vertx.eventBus().publish("svc.register", request);
 
-        routingContext.response().end("end");
+        routingContext.response().end("ok");
     }
 
     private void handleQuery(RoutingContext routingContext) {
@@ -66,6 +64,9 @@ public class LynxVerticle extends AbstractVerticle {
         vertx.eventBus().<String>request("svc.query", svcName)
                 .onSuccess(h -> {
                     routingContext.response().end(h.body());
+                })
+                .onFailure(h -> {
+                    routingContext.response().setStatusCode(500).end();
                 });
     }
 }

@@ -2,7 +2,7 @@ package com.yih.pojo;
 
 import java.util.Objects;
 
-public class RegisterRequest {
+public class SvcDesc {
     String name;
     String url;
     int port;
@@ -35,7 +35,7 @@ public class RegisterRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RegisterRequest that = (RegisterRequest) o;
+        SvcDesc that = (SvcDesc) o;
 
         if (port != that.port) return false;
         return Objects.equals(url, that.url);
