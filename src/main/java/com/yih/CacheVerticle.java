@@ -54,13 +54,11 @@ public class CacheVerticle extends AbstractVerticle {
         }
     }
 
-    private void handleUnregister(Message<JsonObject> msg) {
+    private void handleUnregister(Message<SvcDesc> msg) {
         log.info("svc.unregister {}", msg.body());
-        String depId = msg.body().getString("depId");
-        String svcName = msg.body().getString("svcName");
 
-        map.getOrDefault(svcName, new HashSet<>())
-                .removeIf(svcStatus -> svcStatus.getHealthCheckVerticleId().equals(depId));
+        map.getOrDefault(msg.body().getName(), new HashSet<>())
+                .removeIf(svcStatus -> svcStatus.getDesc().equals(msg.body()));
 
     }
 
