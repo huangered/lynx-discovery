@@ -8,6 +8,7 @@ import java.util.Objects;
 public class RegisterSvc {
     private RegisterRequest req;
     private boolean alive;
+    private String healthCheckVerticleId;
 
     public RegisterSvc(RegisterRequest req, boolean alive) {
         this.req = req;

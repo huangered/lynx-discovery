@@ -1,5 +1,7 @@
 package com.yih.pojo;
 
+import java.util.Objects;
+
 public class RegisterRequest {
     String name;
     String url;
@@ -26,5 +28,23 @@ public class RegisterRequest {
                 ", port=" + port +
                 ", healthUrl='" + healthUrl + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RegisterRequest that = (RegisterRequest) o;
+
+        if (port != that.port) return false;
+        return Objects.equals(url, that.url);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = url != null ? url.hashCode() : 0;
+        result = 31 * result + port;
+        return result;
     }
 }

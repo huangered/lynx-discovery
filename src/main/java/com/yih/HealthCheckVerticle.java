@@ -8,15 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HealthCheckVerticle extends AbstractVerticle {
 
-    private WebClient webClient;
-
-    private int errCount;
-
     private final String svcName;
-
     private final String svcUrl;
-
     private final int svcPort;
+    private WebClient webClient;
+    private int errCount;
+    private long timerId;
 
     public HealthCheckVerticle(String svcName, String svcUrl, int svcPort) {
         errCount = 0;
@@ -28,12 +25,14 @@ public class HealthCheckVerticle extends AbstractVerticle {
     @Override
     public void start() throws Exception {
         webClient = WebClient.create(vertx);
-        vertx.setPeriodic(5000, r -> {
-            webClient.get(svcPort, svcUrl, "/health")
+        timerId = vertx.setPeriodic(5000, r -> {
+            webClient.get(svcPort, svcUrl, "/")
                     .expect(ResponsePredicate.SC_SUCCESS)
+                    .ssl(true)
                     .send(ar -> {
                         if (ar.succeeded()) {
                             errCount = 0;
+                            log.info("svc {} test {}:{} success", svcName, svcUrl, svcPort);
                         } else {
                             errCount += 1;
                             if (errCount > 10) {
@@ -44,5 +43,10 @@ public class HealthCheckVerticle extends AbstractVerticle {
                         }
                     });
         });
+    }
+
+    @Override
+    public void stop() throws Exception {
+        vertx.cancelTimer(timerId);
     }
 }
