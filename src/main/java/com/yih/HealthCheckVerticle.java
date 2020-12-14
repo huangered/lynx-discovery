@@ -3,7 +3,9 @@ package com.yih;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class HealthCheckVerticle extends AbstractVerticle {
 
     private WebClient webClient;

@@ -1,11 +1,10 @@
 package com.yih.pojo;
 
-import java.util.Objects;
-
 public class RegisterRequest {
     String name;
     String url;
     int port;
+    String healthUrl;
 
     public String getName() {
         return name;
@@ -25,20 +24,7 @@ public class RegisterRequest {
                 "name='" + name + '\'' +
                 ", url='" + url + '\'' +
                 ", port=" + port +
+                ", healthUrl='" + healthUrl + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RegisterRequest that = (RegisterRequest) o;
-        return port == that.port &&
-                Objects.equals(url, that.url);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(url, port);
     }
 }

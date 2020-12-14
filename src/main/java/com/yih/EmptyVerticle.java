@@ -3,22 +3,29 @@ package com.yih;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class EmptyVerticle extends AbstractVerticle {
 
     private WebClient webClient;
 
+    private Long id;
+
     @Override
     public void start() throws Exception {
         webClient = WebClient.create(vertx);
-        vertx.setPeriodic(5000, r -> {
-            System.out.println("hello world");
-            webClient.get(3000, "localhost", "/register").expect(ResponsePredicate.SC_SUCCESS)
-                    .send(ar -> {
-                        System.out.println(ar.succeeded());
-                        System.out.println("Receive: " + ar.result().bodyAsString());
 
-                    });
+        id = vertx.setPeriodic(1000, r -> {
+            log.info("hello world");
+
         });
+        log.info("start timer id: {}", id);
+    }
+
+    @Override
+    public void stop() throws Exception {
+        log.info("stop timer: {}", id);
+        vertx.cancelTimer(id);
     }
 }
