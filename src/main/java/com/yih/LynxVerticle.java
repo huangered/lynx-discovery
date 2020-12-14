@@ -43,16 +43,19 @@ public class LynxVerticle extends AbstractVerticle {
     }
 
     private void handleUnregister(RoutingContext routingContext) {
-        log.info("Unregister {}", routingContext.getBodyAsString());
+        JsonObject request = routingContext.getBodyAsJson();
+        log.info("Unregister {}", request);
+
+        vertx.eventBus().publish("svc.unregister", request);
+
         routingContext.response().end();
     }
 
     private void handleRegister(RoutingContext routingContext) {
-        String request = routingContext.getBodyAsString();
+        JsonObject request = routingContext.getBodyAsJson();
         log.info("handle request {}", request);
 
-        JsonObject obj = new JsonObject(request);
-        vertx.eventBus().publish("svc.register", obj);
+        vertx.eventBus().publish("svc.register", request);
 
         routingContext.response().end("end");
     }
