@@ -1,6 +1,6 @@
-package com.yih;
+package com.yih.lynx.server.verticle;
 
-import com.yih.pojo.SvcStatus;
+import com.yih.lynx.core.SvcStatus;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClient;

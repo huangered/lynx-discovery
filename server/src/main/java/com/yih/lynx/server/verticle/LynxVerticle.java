@@ -1,11 +1,8 @@
-package com.yih;
+package com.yih.lynx.server.verticle;
 
 import com.google.gson.Gson;
-import com.yih.codec.SvcDescCodec;
-import com.yih.pojo.SvcDesc;
+import com.yih.lynx.core.SvcDesc;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -14,14 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LynxVerticle extends AbstractVerticle {
 
-    public static void main(String[] argc) {
-        Vertx vertx = Vertx.vertx();
-        vertx.eventBus().registerDefaultCodec(SvcDesc.class, new SvcDescCodec());
-        vertx.deployVerticle(new LynxVerticle());
-        vertx.deployVerticle(new CacheVerticle());
-    }
-
-    Gson gson = new Gson();
+    private Gson gson = new Gson();
 
     @Override
     public void start() {

@@ -1,7 +1,7 @@
-package com.yih.codec;
+package com.yih.lynx.server.codec;
 
 import com.google.gson.Gson;
-import com.yih.pojo.SvcDesc;
+import com.yih.lynx.core.SvcDesc;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.MessageCodec;
 
@@ -20,7 +20,7 @@ public class SvcDescCodec implements MessageCodec<SvcDesc, SvcDesc> {
     @Override
     public SvcDesc decodeFromWire(int pos, Buffer buffer) {
         int len = buffer.getInt(pos);
-        String str = buffer.getString(pos+4, pos+4+len);
+        String str = buffer.getString(pos + 4, pos + 4 + len);
         return gson.fromJson(str, SvcDesc.class);
     }
 

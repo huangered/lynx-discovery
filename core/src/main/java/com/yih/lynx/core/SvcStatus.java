@@ -1,4 +1,4 @@
-package com.yih.pojo;
+package com.yih.lynx.core;
 
 import lombok.Data;
 

@@ -1,7 +1,10 @@
-package com.yih.pojo;
+package com.yih.lynx.core;
+
+import lombok.Data;
 
 import java.util.Objects;
 
+@Data
 public class SvcDesc {
     String name;
     String url;

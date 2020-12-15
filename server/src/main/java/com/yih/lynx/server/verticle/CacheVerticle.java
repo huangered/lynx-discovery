@@ -1,13 +1,11 @@
-package com.yih;
+package com.yih.lynx.server.verticle;
 
 import com.google.gson.Gson;
-import com.yih.pojo.SvcDesc;
-import com.yih.pojo.SvcStatus;
+import com.yih.lynx.core.SvcDesc;
+import com.yih.lynx.core.SvcStatus;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Handler;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
-import io.vertx.core.json.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;

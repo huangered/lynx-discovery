@@ -1,0 +1,41 @@
+plugins {
+    id 'application'
+}
+
+ext {
+    vertx_version = "4.0.0.CR2"
+    lombok_version = "1.18.12"
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    implementation(project(':core'))
+    // vertx bom
+    implementation platform("io.vertx:vertx-stack-depchain:${vertx_version}")
+
+    implementation("io.vertx:vertx-core")
+    implementation("io.vertx:vertx-web")
+    implementation("io.vertx:vertx-web-client")
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    compileOnly "org.projectlombok:lombok:${lombok_version}"
+    annotationProcessor "org.projectlombok:lombok:${lombok_version}"
+
+    implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation("ch.qos.logback:logback-core:1.2.3")
+    implementation("org.slf4j:slf4j-api:1.7.30")
+
+    implementation("com.google.guava:guava:30.0-jre")
+
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+application {
+    mainClass = 'com.yih.LynxVerticle'
+}
