@@ -31,11 +31,8 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.30")
 
     implementation("com.google.guava:guava:30.0-jre")
-
-
-    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 application {
-    mainClass = 'com.yih.LynxVerticle'
+    mainClass = 'com.yih.lynx.server.LynxServer'
 }

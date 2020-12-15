@@ -11,7 +11,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LynxVerticle extends AbstractVerticle {
 
+    private final int port;
     private Gson gson = new Gson();
+
+    public LynxVerticle() {
+        this.port = 3000;
+    }
+
+    public LynxVerticle(int port) {
+        this.port = port;
+    }
 
     @Override
     public void start() {
@@ -19,6 +28,8 @@ public class LynxVerticle extends AbstractVerticle {
 
         router.post().handler(BodyHandler.create());
         router.get().handler(BodyHandler.create());
+
+        router.get("/").handler(this::handleEcho);
 
         router.post("/register")
                 .handler(this::handleRegister);
@@ -31,8 +42,12 @@ public class LynxVerticle extends AbstractVerticle {
 
         vertx.createHttpServer()
                 .requestHandler(router)
-                .listen(3000);
+                .listen(port);
 
+    }
+
+    private void handleEcho(RoutingContext routingContext) {
+        routingContext.response().end("echo");
     }
 
     private void handleUnregister(RoutingContext routingContext) {
@@ -61,7 +76,7 @@ public class LynxVerticle extends AbstractVerticle {
                     routingContext.response().end(h.body());
                 })
                 .onFailure(h -> {
-                    routingContext.response().setStatusCode(500).end();
+                    routingContext.response().setStatusCode(404).end();
                 });
     }
 }

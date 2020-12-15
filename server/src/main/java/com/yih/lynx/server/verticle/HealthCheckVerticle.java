@@ -2,7 +2,6 @@ package com.yih.lynx.server.verticle;
 
 import com.yih.lynx.core.SvcStatus;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
 import lombok.extern.slf4j.Slf4j;
@@ -37,17 +36,15 @@ public class HealthCheckVerticle extends AbstractVerticle {
                             svc.setAlive(true);
                             log.info("svc {} test {}:{} success", svcName, svcUrl, svcPort);
                         } else {
+                            log.error("svc {} check fail", svcUrl);
                             errCount += 1;
                             svc.setAlive(false);
                             if (errCount > 10) {
                                 // remove from map
                                 // undeployment self
                                 log.info("svc {} lost, unregister", svcName);
-                                JsonObject obj = new JsonObject()
-                                        .put("svcName", svcName)
-                                        .put("depId", this.deploymentID());
 
-                                vertx.eventBus().publish("svc.unregister", obj);
+                                vertx.eventBus().publish("svc.unregister", svc.getDesc());
                                 vertx.undeploy(this.deploymentID());
                             }
                         }

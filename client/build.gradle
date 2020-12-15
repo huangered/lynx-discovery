@@ -15,12 +15,9 @@ configurations {
 
 dependencies {
     implementation(project(':core'))
-    // vertx bom
-    implementation platform("io.vertx:vertx-stack-depchain:${vertx_version}")
 
-    implementation("io.vertx:vertx-core")
-    implementation("io.vertx:vertx-web")
-    implementation("io.vertx:vertx-web-client")
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+
     implementation 'com.google.code.gson:gson:2.8.6'
 
     compileOnly "org.projectlombok:lombok:${lombok_version}"
@@ -31,7 +28,5 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.30")
 
     implementation("com.google.guava:guava:30.0-jre")
-
-
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation(project(':server'))
 }

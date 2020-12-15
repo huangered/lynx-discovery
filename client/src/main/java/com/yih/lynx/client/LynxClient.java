@@ -2,16 +2,12 @@ package com.yih.lynx.client;
 
 import com.yih.lynx.core.SvcDesc;
 
-public class LynxClient {
-    public boolean register() {
-        return false;
-    }
+public interface LynxClient {
+    boolean echo();
 
-    public boolean unregister() {
-        return false;
-    }
+    boolean register();
 
-    public SvcDesc query(String name) {
-        return null;
-    }
+    boolean unregister();
+
+    SvcDesc query(String name);
 }

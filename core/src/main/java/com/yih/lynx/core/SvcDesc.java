@@ -1,36 +1,21 @@
 package com.yih.lynx.core;
 
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.Objects;
 
-@Data
+@Getter
 public class SvcDesc {
-    String name;
-    String url;
-    int port;
-    String healthUrl;
+    private String name;
+    private String url;
+    private int port;
+    private String healthUrl;
 
-    public String getName() {
-        return name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    @Override
-    public String toString() {
-        return "RegisterRequest{" +
-                "name='" + name + '\'' +
-                ", url='" + url + '\'' +
-                ", port=" + port +
-                ", healthUrl='" + healthUrl + '\'' +
-                '}';
+    public SvcDesc(String svcName, String svcUrl, int svcPort, String svcHealthUrl) {
+        this.name = svcName;
+        this.url = svcUrl;
+        this.port = svcPort;
+        this.healthUrl = svcHealthUrl;
     }
 
     @Override

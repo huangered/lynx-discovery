@@ -39,15 +39,15 @@ public class CacheVerticle extends AbstractVerticle {
         String svcName = msg.body();
         Set<SvcStatus> ss = map.getOrDefault(svcName, new HashSet<>());
         if (ss.isEmpty()) {
-            msg.reply("");
+            msg.fail(404, "not found");
         } else {
             Optional<SvcStatus> svc = ss.stream()
                     .filter(SvcStatus::isAlive)
                     .findAny();
             if (svc.isPresent()) {
-                msg.reply(String.format("%s:%s", svc.get().getDesc().getUrl(), svc.get().getDesc().getPort()));
+                msg.reply(gson.toJson(svc.get().getDesc()));
             } else {
-                msg.reply("");
+                msg.fail(404, "not found");
             }
         }
     }
