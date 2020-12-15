@@ -25,11 +25,12 @@ public class HealthCheckVerticle extends AbstractVerticle {
         final String svcName = svc.getDesc().getName();
         final String svcUrl = svc.getDesc().getUrl();
         final int svcPort = svc.getDesc().getPort();
+        final String svcHealth = svc.getDesc().getHealthUrl();
         webClient = WebClient.create(vertx);
         timerId = vertx.setPeriodic(DELAY, r -> {
-            webClient.get(svcPort, svcUrl, "/")
+            webClient.get(svcPort, svcUrl, svcHealth)
                     .expect(ResponsePredicate.SC_SUCCESS)
-                    .ssl(true)
+                    .ssl(svc.getDesc().isSsl())
                     .send(ar -> {
                         if (ar.succeeded()) {
                             errCount = 0;
