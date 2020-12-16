@@ -10,7 +10,7 @@ public class LynxClientImplTest {
 
     @BeforeAll
     public static void before() {
-        server.start(true);
+        server.start(3000, true);
     }
 
     @AfterAll
@@ -32,5 +32,17 @@ public class LynxClientImplTest {
         LynxClient client = new LynxClientImpl("http://localhost", 3000,
                 "a", "www.baidu.com", 443, "/");
         Assertions.assertEquals(true, client.register());
+    }
+
+    @DisplayName("unregister test")
+    @Test
+    public void unregister() {
+
+    }
+
+    @DisplayName("query test")
+    @Test
+    public void query() {
+
     }
 }

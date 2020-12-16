@@ -14,10 +14,6 @@ public class LynxVerticle extends AbstractVerticle {
     private final int port;
     private Gson gson = new Gson();
 
-    public LynxVerticle() {
-        this.port = 3000;
-    }
-
     public LynxVerticle(int port) {
         this.port = port;
     }
