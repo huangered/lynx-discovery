@@ -3,25 +3,12 @@ plugins {
 }
 
 ext {
-    vertx_version = "4.0.0.CR2"
-    lombok_version = "1.18.12"
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
 }
 
 dependencies {
     implementation(project(':core'))
 
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
-
-    implementation 'com.google.code.gson:gson:2.8.6'
-
-    compileOnly "org.projectlombok:lombok:${lombok_version}"
-    annotationProcessor "org.projectlombok:lombok:${lombok_version}"
 
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("ch.qos.logback:logback-core:1.2.3")
