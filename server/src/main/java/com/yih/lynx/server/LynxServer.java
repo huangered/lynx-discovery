@@ -10,16 +10,23 @@ import io.vertx.core.Vertx;
 
 public class LynxServer {
 
-    public static void main(String[] argc) {
-        new LynxServer().start(3000,true);
+    private LynxOption option;
+
+    public LynxServer(LynxOption option) {
+        this.option = option;
     }
 
-    public void start(int port, boolean wait) {
+    public static void main(String[] argc) {
+        LynxOption option = LynxOption.builder().port(3000).wait(true).build();
+        new LynxServer(option).start();
+    }
+
+    public void start() {
         Vertx vertx = Vertx.vertx();
         vertx.eventBus().registerDefaultCodec(SvcDesc.class, new SvcDescCodec());
-        Future<String> f1 = vertx.deployVerticle(new LynxVerticle(port));
+        Future<String> f1 = vertx.deployVerticle(new LynxVerticle(option.getPort()));
         Future<String> f2 = vertx.deployVerticle(new CacheVerticle());
-        if (wait) {
+        if (option.isWait()) {
             CompositeFuture f = CompositeFuture.join(f1, f2);
             while (!f.isComplete()) {
 
@@ -30,4 +37,6 @@ public class LynxServer {
     public void stop() {
         Vertx.vertx().close();
     }
+
+
 }

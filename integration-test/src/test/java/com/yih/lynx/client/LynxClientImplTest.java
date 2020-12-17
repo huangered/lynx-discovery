@@ -1,16 +1,19 @@
 package com.yih.lynx.client;
 
+import com.yih.lynx.server.LynxOption;
 import com.yih.lynx.server.LynxServer;
 import org.junit.jupiter.api.*;
 
 @DisplayName("Lynx client default impl test")
 public class LynxClientImplTest {
 
-    static LynxServer server = new LynxServer();
+    static LynxOption option = LynxOption.builder().port(3000).wait(true).build();
+
+    static LynxServer server = new LynxServer(option);
 
     @BeforeAll
     public static void before() {
-        server.start(3000, true);
+        server.start();
     }
 
     @AfterAll
@@ -32,17 +35,5 @@ public class LynxClientImplTest {
         LynxClient client = new LynxClientImpl("http://localhost", 3000,
                 "a", "www.baidu.com", 443, "/");
         Assertions.assertEquals(true, client.register());
-    }
-
-    @DisplayName("unregister test")
-    @Test
-    public void unregister() {
-
-    }
-
-    @DisplayName("query test")
-    @Test
-    public void query() {
-
     }
 }
