@@ -2,10 +2,6 @@ plugins {
     id 'application'
 }
 
-ext {
-    vertx_version = "4.0.0.CR2"
-}
-
 dependencies {
     implementation(project(':core'))
     // vertx bom
