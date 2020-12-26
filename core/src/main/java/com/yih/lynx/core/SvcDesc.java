@@ -2,6 +2,8 @@ package com.yih.lynx.core;
 
 import lombok.Getter;
 
+import java.util.StringJoiner;
+
 @Getter
 public class SvcDesc implements Comparable<SvcDesc> {
     private String name;
@@ -29,5 +31,16 @@ public class SvcDesc implements Comparable<SvcDesc> {
             return r;
         }
         return Integer.compare(port, svcDesc.port);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", SvcDesc.class.getSimpleName() + " {", "}")
+                .add("name='" + name + "'")
+                .add("url='" + url + "'")
+                .add("port=" + port)
+                .add("healthUrl='" + healthUrl + "'")
+                .add("ssl=" + ssl)
+                .toString();
     }
 }

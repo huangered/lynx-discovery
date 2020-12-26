@@ -18,8 +18,6 @@ public class LynxClientImplTest {
         Vertx vertx = Vertx.vertx();
         vertx.eventBus().registerDefaultCodec(SvcDesc.class, new SvcDescCodec());
 
-        LynxOption option = LynxOption.builder().port(3000).build();
-
         Future<String> f = vertx.deployVerticle(new LynxServerVerticle(option));
         // wait the server ready for test
         while (!f.isComplete()) {

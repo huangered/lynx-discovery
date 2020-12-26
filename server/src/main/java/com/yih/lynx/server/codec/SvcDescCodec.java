@@ -20,7 +20,8 @@ public class SvcDescCodec implements MessageCodec<SvcDesc, SvcDesc> {
     @Override
     public SvcDesc decodeFromWire(int pos, Buffer buffer) {
         int len = buffer.getInt(pos);
-        String str = buffer.getString(pos + 4, pos + 4 + len);
+        int size = Integer.SIZE / 8;
+        String str = buffer.getString(pos + size, pos + size + len);
         return gson.fromJson(str, SvcDesc.class);
     }
 

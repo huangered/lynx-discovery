@@ -9,12 +9,12 @@ import io.vertx.ext.web.handler.BodyHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class LynxVerticle extends AbstractVerticle {
+public class LynxHttpVerticle extends AbstractVerticle {
 
     private final int port;
     private Gson gson = new Gson();
 
-    public LynxVerticle(int port) {
+    public LynxHttpVerticle(int port) {
         this.port = port;
     }
 
@@ -38,8 +38,13 @@ public class LynxVerticle extends AbstractVerticle {
 
         vertx.createHttpServer()
                 .requestHandler(router)
-                .listen(port);
-
+                .listen(port).onComplete(r-> {
+                    if(r.succeeded()) {
+                        log.info("startup status: success");
+                    }else {
+                        log.info("startup status: fail");
+                    }
+        });
     }
 
     @Override
@@ -48,6 +53,7 @@ public class LynxVerticle extends AbstractVerticle {
     }
 
     private void handleEcho(RoutingContext routingContext) {
+        log.info("echo");
         routingContext.response().end("echo");
     }
 

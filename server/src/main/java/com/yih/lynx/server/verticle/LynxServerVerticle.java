@@ -15,7 +15,7 @@ public class LynxServerVerticle extends AbstractVerticle {
 
     @Override
     public void start() {
-        vertx.deployVerticle(new LynxVerticle(option.getPort()));
+        vertx.deployVerticle(new LynxHttpVerticle(option.getPort()));
         vertx.deployVerticle(new CacheVerticle());
     }
 
