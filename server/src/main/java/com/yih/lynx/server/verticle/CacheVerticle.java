@@ -59,16 +59,16 @@ public class CacheVerticle extends AbstractVerticle {
     private void handleRegister(Message<SvcDesc> req) {
         log.info("receive msg {}", req.body().toString());
 
-        SvcStatus svc = new SvcStatus(req.body(), true);
-
-        Set<SvcStatus> one = new TreeSet<>();
+        final SvcStatus svc = new SvcStatus(req.body(), true);
+        final String key = svc.getDesc().getName();
+        final Set<SvcStatus> one = new TreeSet<>();
         one.add(svc);
-        map.merge(svc.getDesc().getName(), one, (pre, cur) -> {
+        map.merge(key, one, (pre, cur) -> {
             pre.addAll(cur);
             return pre;
         });
 
-        if (map.get(svc.getDesc().getName()).contains(svc)) {
+        if (map.get(key).contains(svc)) {
             vertx.deployVerticle(new HealthCheckVerticle(svc))
                     .onSuccess(handler -> {
                         svc.setAlive(false);
