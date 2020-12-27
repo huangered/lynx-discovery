@@ -36,9 +36,11 @@ public class PeerVerticle extends AbstractVerticle {
      */
     private void handleRegister(Message<SvcDesc> msg) {
         final SvcDesc body = msg.body();
+
         if (body.isFromPeer()) {
             return;
         }
+        body.setFromPeer(true);
         for (LynxOption peer : hosts) {
             webClient.post(peer.getPort(), peer.getUrl(), "/register")
                     .expect(ResponsePredicate.SC_SUCCESS)
@@ -60,6 +62,7 @@ public class PeerVerticle extends AbstractVerticle {
         if (body.isFromPeer()) {
             return;
         }
+        body.setFromPeer(true);
         for (LynxOption peer : hosts) {
             webClient.post(peer.getPort(), peer.getUrl(), "/unregister")
                     .expect(ResponsePredicate.SC_SUCCESS)

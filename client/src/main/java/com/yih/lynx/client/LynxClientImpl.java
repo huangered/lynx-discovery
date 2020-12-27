@@ -43,13 +43,7 @@ public class LynxClientImpl implements LynxClient {
 
     @Override
     public boolean register(String svcName, String svcUrl, int svcPort, String svcHealthUrl) {
-        return register(svcName, svcUrl, svcPort,svcHealthUrl, false);
-    }
-
-    @Override
-    public boolean register(String svcName, String svcUrl, int svcPort, String svcHealthUrl, boolean fromPeer) {
         final SvcDesc svcDesc = new SvcDesc(svcName, svcUrl, svcPort, svcHealthUrl);
-        svcDesc.setFromPeer(fromPeer);
         final String path = String.format("%s:%s%s", url, port, "/register");
 
         RequestBody body = RequestBody.create(gson.toJson(svcDesc), JSON);
@@ -69,13 +63,7 @@ public class LynxClientImpl implements LynxClient {
 
     @Override
     public boolean unregister(String svcName, String svcUrl, int svcPort, String svcHealthUrl) {
-        return unregister(svcName, svcUrl,svcPort,svcHealthUrl);
-    }
-
-    @Override
-    public boolean unregister(String svcName, String svcUrl, int svcPort, String svcHealthUrl, boolean fromPeer) {
         final SvcDesc svcDesc = new SvcDesc(svcName, svcUrl, svcPort, svcHealthUrl);
-        svcDesc.setFromPeer(fromPeer);
         final String path = String.format("%s:%s%s", url, port, "/unregister");
 
         RequestBody body = RequestBody.create(gson.toJson(svcDesc), JSON);
