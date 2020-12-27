@@ -6,5 +6,6 @@ import lombok.Getter;
 @Builder
 @Getter
 public class LynxOption {
+    private String url;
     private int port;
 }

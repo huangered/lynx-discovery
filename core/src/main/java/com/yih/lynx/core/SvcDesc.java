@@ -12,6 +12,7 @@ public class SvcDesc implements Comparable<SvcDesc> {
     private String healthUrl;
     private boolean ssl;
 
+    private boolean fromPeer;
 
     public SvcDesc(String svcName, String svcUrl, int svcPort, String svcHealthUrl) {
         this.name = svcName;

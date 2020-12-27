@@ -8,6 +8,8 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import org.junit.jupiter.api.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @DisplayName("Lynx client default impl test")
 public class LynxClientImplTest {
 
@@ -32,16 +34,14 @@ public class LynxClientImplTest {
     @DisplayName("echo test")
     @Test
     public void echo() {
-        LynxClient client = new LynxClientImpl("http://localhost", 3000,
-                "a", "www.baidu.com", 443, "/");
-        Assertions.assertEquals(true, client.echo());
+        LynxClient client = new LynxClientImpl("http://localhost", 3000);
+        assertEquals(true, client.echo());
     }
 
     @DisplayName("register test")
     @Test
     public void register() {
-        LynxClient client = new LynxClientImpl("http://localhost", 3000,
-                "a", "www.baidu.com", 443, "/");
-        Assertions.assertEquals(true, client.register());
+        LynxClient client = new LynxClientImpl("http://localhost", 3000);
+        assertEquals(true, client.register("a", "www.baidu.com", 443, "/"));
     }
 }

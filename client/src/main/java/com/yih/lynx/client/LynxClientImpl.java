@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.util.concurrent.Future;
 
 @Slf4j
 public class LynxClientImpl implements LynxClient {
@@ -15,13 +16,11 @@ public class LynxClientImpl implements LynxClient {
     private final String url;
     private final int port;
     private final OkHttpClient client;
-    private final SvcDesc svcDesc;
     private final Gson gson = new Gson();
 
-    public LynxClientImpl(String url, int port, String svcName, String svcUrl, int svcPort, String svcHealthUrl) {
+    public LynxClientImpl(String url, int port) {
         this.url = url;
         this.port = port;
-        this.svcDesc = new SvcDesc(svcName, svcUrl, svcPort, svcHealthUrl);
         this.client = new OkHttpClient();
     }
 
@@ -43,8 +42,10 @@ public class LynxClientImpl implements LynxClient {
     }
 
     @Override
-    public boolean register() {
-        String path = String.format("%s:%s%s", url, port, "/register");
+    public boolean register(String svcName, String svcUrl, int svcPort, String svcHealthUrl) {
+        final SvcDesc svcDesc = new SvcDesc(svcName, svcUrl, svcPort, svcHealthUrl);
+
+        final String path = String.format("%s:%s%s", url, port, "/register");
 
         RequestBody body = RequestBody.create(gson.toJson(svcDesc), JSON);
         Request request = new Request.Builder()
@@ -63,8 +64,9 @@ public class LynxClientImpl implements LynxClient {
     }
 
     @Override
-    public boolean unregister() {
-        String path = String.format("%s:%s%s", url, port, "/unregister");
+    public boolean unregister(String svcName, String svcUrl, int svcPort, String svcHealthUrl) {
+        final SvcDesc svcDesc = new SvcDesc(svcName, svcUrl, svcPort, svcHealthUrl);
+        final String path = String.format("%s:%s%s", url, port, "/unregister");
 
         RequestBody body = RequestBody.create(gson.toJson(svcDesc), JSON);
         Request request = new Request.Builder()
