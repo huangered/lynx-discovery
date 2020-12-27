@@ -25,15 +25,15 @@ public class LynxHttpVerticle extends AbstractVerticle {
         router.post().handler(BodyHandler.create());
         router.get().handler(BodyHandler.create());
 
-        router.get("/").handler(this::handleEcho);
+        router.get(SvcPattern.ECHO).handler(this::handleEcho);
 
-        router.post("/register")
+        router.post(SvcPattern.REGISTER)
                 .handler(this::handleRegister);
 
-        router.post("/unregister")
+        router.post(SvcPattern.UNREGISTER)
                 .handler(this::handleUnregister);
 
-        router.get("/query")
+        router.get(SvcPattern.QUERY)
                 .handler(this::handleQuery);
 
         vertx.createHttpServer()

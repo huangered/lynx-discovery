@@ -4,7 +4,6 @@ plugins {
 
 dependencies {
     implementation(project(':core'))
-    implementation(project(':client'))
     // vertx bom
     implementation platform("io.vertx:vertx-stack-depchain:${vertx_version}")
 
