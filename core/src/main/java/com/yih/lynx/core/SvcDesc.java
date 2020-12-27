@@ -26,6 +26,15 @@ public class SvcDesc implements Comparable<SvcDesc> {
         this.ssl = true;
     }
 
+    public SvcDesc(SvcDesc svcDesc) {
+        this.name = svcDesc.name;
+        this.url = svcDesc.url;
+        this.port = svcDesc.port;
+        this.healthUrl = svcDesc.healthUrl;
+        this.ssl = svcDesc.ssl;
+        this.fromPeer = svcDesc.fromPeer;
+    }
+
     @Override
     public int compareTo(SvcDesc svcDesc) {
         int r;

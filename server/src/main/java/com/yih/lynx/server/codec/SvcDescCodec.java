@@ -27,7 +27,7 @@ public class SvcDescCodec implements MessageCodec<SvcDesc, SvcDesc> {
 
     @Override
     public SvcDesc transform(SvcDesc svcDesc) {
-        return svcDesc;
+        return new SvcDesc(svcDesc);
     }
 
     @Override
