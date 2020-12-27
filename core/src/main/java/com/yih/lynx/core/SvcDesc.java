@@ -1,10 +1,11 @@
 package com.yih.lynx.core;
 
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.StringJoiner;
 
-@Getter
+@Data
 public class SvcDesc implements Comparable<SvcDesc> {
     private String name;
     private String url;
@@ -12,6 +13,9 @@ public class SvcDesc implements Comparable<SvcDesc> {
     private String healthUrl;
     private boolean ssl;
 
+    /**
+     * the message is from another lynx client for sync
+     */
     private boolean fromPeer;
 
     public SvcDesc(String svcName, String svcUrl, int svcPort, String svcHealthUrl) {

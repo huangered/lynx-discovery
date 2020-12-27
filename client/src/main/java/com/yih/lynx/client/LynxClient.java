@@ -6,8 +6,10 @@ public interface LynxClient {
     boolean echo();
 
     boolean register(String svcName, String svcUrl, int svcPort, String svcHealthUrl);
+    boolean register(String svcName, String svcUrl, int svcPort, String svcHealthUrl, boolean fromPeer);
 
     boolean unregister(String svcName, String svcUrl, int svcPort, String svcHealthUrl);
+    boolean unregister(String svcName, String svcUrl, int svcPort, String svcHealthUrl, boolean fromPeer);
 
     SvcDesc query(String name);
 }
